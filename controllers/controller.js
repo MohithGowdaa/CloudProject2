@@ -46,9 +46,6 @@ app.post('/translate', async (req, res) => {
     }
 });
 
-
-
-
 // Function to translate text
 async function translateText(text, language) {
     const translateParams = {
