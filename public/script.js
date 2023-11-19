@@ -2,6 +2,7 @@ const translateButton = document.getElementById('translateButton');
 const inputText = document.getElementById('inputText');
 const targetLanguage = document.getElementById('targetLanguage');
 const translatedOutput = document.getElementById('translatedOutput');
+const sentimentOutput = document.getElementById('sentimentOutput'); // Added element reference
 
 translateButton.addEventListener('click', async () => {
     const text = inputText.value;
@@ -24,6 +25,9 @@ translateButton.addEventListener('click', async () => {
         console.log('Received Data:', data);
 
         translatedOutput.innerText = `Translated Text: ${data.translatedText}`;
+
+        // Displaying sentiment analysis result
+        sentimentOutput.innerText = `Sentiment Analysis: ${data.sentiment}`;
 
         const audioPlayer = document.getElementById('audioPlayer');
 
