@@ -1,2 +1,2 @@
 # CloudProject2
-implemented Amazon Translate and Polly
+implemented Amazon Translate, Amazon comprehend and Polly
