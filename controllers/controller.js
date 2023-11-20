@@ -3,7 +3,7 @@ const AWS = require('aws-sdk');
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_DEFAULT_REGION
+    region: process.env.AWS_DEFAULT_REGION || us-west-2
 });
 
 const translate = new AWS.Translate();
@@ -42,7 +42,7 @@ async function synthesizeSpeech(translatedText) {
 
 async function analyzeSentiment(text) {
     const sentimentParams = {
-        LanguageCode: 'en', // Assuming the translated text is in English, adjust accordingly
+        LanguageCode: 'en', 
         Text: text
     };
 
@@ -53,8 +53,6 @@ async function analyzeSentiment(text) {
         throw error;
     }
 }
-
-
 
 module.exports = {
     translateText,
