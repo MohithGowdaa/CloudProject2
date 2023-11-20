@@ -34,7 +34,7 @@ translateButton.addEventListener('click', async () => {
             const audioData = new Uint8Array(data.audioStream.data);
             const audioBlob = new Blob([audioData], { type: 'audio/mpeg' });
             const audioURL = URL.createObjectURL(audioBlob);
-
+console.log(audioURL);
             audioPlayer.src = audioURL;
             audioPlayer.style.display = 'block';
             audioPlayer.play(); 
