@@ -1,0 +1,73 @@
+Resources:
+  MySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Security group for ALB and EC2 instance"
+      VpcId: "vpc-0d3b4d6230afcd228"  
+      SecurityGroupIngress:
+        - CidrIp: "0.0.0.0/0"
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+        - CidrIp: "0.0.0.0/0"  
+          FromPort: 22
+          IpProtocol: tcp
+          ToPort: 22
+
+  MyALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: MyALB
+      Subnets:
+        - "subnet-08af1069f113064e3"  
+        - "subnet-0e88a5c2d3065b2b1"  
+        - "subnet-0fcf16ebd83e3c3b5"  
+        - "subnet-0978365546736f0e5"  
+      SecurityGroups:
+        - !Ref MySecurityGroup
+      Type: application
+      Scheme: internet-facing
+
+  MyTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: MyTargetGroup
+      Protocol: HTTP
+      Port: 80
+      VpcId: "vpc-0d3b4d6230afcd228"  
+      Targets:
+        - Id: !Ref MyEC2Instance  
+
+  MyListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref MyTargetGroup
+      LoadBalancerArn: !Ref MyALB
+      Port: 80
+      Protocol: HTTP
+
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: "ami-093467ec28ae4fe03"  
+      InstanceType: "t2.micro"
+      KeyName: "translate" 
+      SecurityGroupIds:
+        - !Ref MySecurityGroup
+      SubnetId: "subnet-0978365546736f0e5"  
+      Tags:
+        - Key: Name
+          Value: aws-ml
+
+  MyNewEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc  
+
+  MyEIPAssociation:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      AllocationId: !GetAtt MyNewEIP.AllocationId  
+      InstanceId: !Ref MyEC2Instance
